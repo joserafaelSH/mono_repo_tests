@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  nest_js_api:
+    build: ./nestjs
+    entrypoint: .docker/entrypoint.sh
+    container_name: nest_js_api
+    ports:
+      - 3000:3000
+      - 5555:5555
+    volumes:
+      - ./nestjs:/home/node/app
+
+    depends_on:
+      - db
+  
+  db:
+    build: ./nestjs/.docker/postgres
+    container_name: db_nest_js_api
+    ports:
+      - 5433:5432
+    restart: always
+    tty: true
+    volumes:
+      - ./nestjs/.docker/db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nest_js_api
+
+  
+  go_ms:
+      build: ./go
+      container_name: go_ms
+      working_dir: /app
+      volumes:
+        - ./go:/app
+      ports:
+        - "8080:8080"
+      command: go run cmd/main.go
+
+  

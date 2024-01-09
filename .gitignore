@@ -1,0 +1,5 @@
+/nestjs/.docker/db_data/
+/nestjs/.docker/db_data/*.conf
+/nestjs/.pnpm-store
+/nestjs/dist
+/nestjs/node_modules
